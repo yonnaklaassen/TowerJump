@@ -51,11 +51,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Platform")
-        {
-            playerIsGrounded = true;
-        }
-        if (collision.tag == "Ground")
+        if(collision.CompareTag("Platform") || collision.CompareTag("Ground") || collision.CompareTag("BrokenPlatform"))
         {
             playerIsGrounded = true;
         }
@@ -64,13 +60,10 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.tag == "Platform")
+        if (collision.CompareTag("Platform") || collision.CompareTag("Ground") || collision.CompareTag("BrokenPlatform"))
         {
             playerIsGrounded = false;
         }
-        if (collision.tag == "Ground")
-        {
-            playerIsGrounded = false;
-        }
+
     }
 }

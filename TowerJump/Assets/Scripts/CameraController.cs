@@ -2,18 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraFollow : MonoBehaviour
+public class CameraController : MonoBehaviour
 {
     [SerializeField]
     private float speed = 0.0f;
 
     [SerializeField]
     private float cameraRiseTimer = 0.0f;
-
-    private void Awake()
-    {
-       
-    }
 
     void FixedUpdate()
     {
