@@ -5,7 +5,11 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 0;
+    private float speed = 8.0f;
+
+    private float jumpTimer = 1.7f;
+
+    private bool playerIsGrounded = true;
 
     private Rigidbody2D rb;
 
@@ -24,11 +28,6 @@ public class PlayerController : MonoBehaviour
 
         movementX = movementVector.x;
         movementY = movementVector.y;
-
-        if(Input.GetKey(KeyCode.UpArrow))
-        {
-            rb.velocity = new Vector2(rb.velocity.x, speed);
-        }
     }
 
     private void FixedUpdate()
@@ -36,5 +35,42 @@ public class PlayerController : MonoBehaviour
         Vector3 movement = new Vector3(movementX, 0.0f, movementY);
 
         rb.AddForce(movement * speed);
+
+        jumpTimer -= Time.deltaTime;
+        if (jumpTimer <= 0.0f)
+        {
+            if (playerIsGrounded)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, speed);
+                jumpTimer = 1.7f;
+                playerIsGrounded = false;
+            }
+        }
+
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Platform")
+        {
+            playerIsGrounded = true;
+        }
+        if (collision.tag == "Ground")
+        {
+            playerIsGrounded = true;
+        }
+
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.tag == "Platform")
+        {
+            playerIsGrounded = false;
+        }
+        if (collision.tag == "Ground")
+        {
+            playerIsGrounded = false;
+        }
     }
 }
