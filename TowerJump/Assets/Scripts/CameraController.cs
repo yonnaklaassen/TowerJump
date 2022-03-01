@@ -23,9 +23,6 @@ public class CameraController : MonoBehaviour
             cameraRiseTimer = 0.01f;
         }
 
-        Debug.Log("Speed: " + speed);
-        Debug.Log("Timer: " + cameraRiseTimer);
-
     }
 
 }

@@ -5,17 +5,29 @@ using UnityEngine;
 public class BrokenPlatformController : MonoBehaviour
 {
     [SerializeField]
-    private Transform player;
+    private Rigidbody2D rb;
 
-    // Start is called before the first frame update
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            Invoke("DropPlatform", 8.0f);
+            Destroy(gameObject, 4.0f);
+        }
+
+    }
+
+    private void DropPlatform()
+    {
+        rb.isKinematic = false;
     }
 }

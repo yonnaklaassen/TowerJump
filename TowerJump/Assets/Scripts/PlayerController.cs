@@ -5,11 +5,16 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField]
+    private Animator animator;
+
+
     private float speed = 8.0f;
 
     private float jumpTimer = 1.7f;
 
     private bool playerIsGrounded = true;
+    private bool playerFacesRight = true;
 
     private Rigidbody2D rb;
 
@@ -32,6 +37,8 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        RunningAnimation();
+
         Vector3 movement = new Vector3(movementX, 0.0f, movementY);
 
         rb.AddForce(movement * speed);
@@ -44,9 +51,23 @@ public class PlayerController : MonoBehaviour
                 rb.velocity = new Vector2(rb.velocity.x, speed);
                 jumpTimer = 1.7f;
                 playerIsGrounded = false;
+                animator.SetBool("IsJumping", true);
             }
         }
 
+    }
+
+    private void RunningAnimation()
+    {
+        var horizontalMove = Input.GetAxisRaw("Horizontal") * speed;
+
+        if ((horizontalMove > 0 && !playerFacesRight) || (horizontalMove < 0 && playerFacesRight))
+        {
+            playerFacesRight = !playerFacesRight;
+            transform.Rotate(new Vector3(0, 180, 0));
+        }
+
+        animator.SetFloat("Speed", horizontalMove);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -54,6 +75,7 @@ public class PlayerController : MonoBehaviour
         if(collision.CompareTag("Platform") || collision.CompareTag("Ground") || collision.CompareTag("BrokenPlatform"))
         {
             playerIsGrounded = true;
+            animator.SetBool("IsJumping", false);
         }
 
     }
