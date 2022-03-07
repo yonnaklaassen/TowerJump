@@ -67,7 +67,7 @@ public class PlayerController : MonoBehaviour
             transform.Rotate(new Vector3(0, 180, 0));
         }
 
-        animator.SetFloat("Speed", horizontalMove);
+        animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
