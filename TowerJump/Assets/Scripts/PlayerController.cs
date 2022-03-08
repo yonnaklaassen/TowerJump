@@ -2,12 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
+
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     private Animator animator;
 
+    [SerializeField]
+    private AudioSource jumpSound;
+
+    [SerializeField]
+    private TextMeshProUGUI coinText;
+
+    private int coinCount;
+    private bool collectedCoin = false;
 
     private float speed = 8.0f;
 
@@ -25,6 +35,9 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        coinCount = 0;
+        setCoinText();
+
     }
 
     private void OnMove(InputValue movementValue)
@@ -51,6 +64,7 @@ public class PlayerController : MonoBehaviour
                 rb.velocity = new Vector2(rb.velocity.x, speed);
                 jumpTimer = 1.7f;
                 playerIsGrounded = false;
+                PlayJumpSound();
                 animator.SetBool("IsJumping", true);
             }
         }
@@ -78,6 +92,17 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("IsJumping", false);
         }
 
+        if(collision.CompareTag("PickUp") && !collectedCoin)
+        {
+            coinCount++;
+            collectedCoin = true;
+            setCoinText();
+        }
+        else
+        {
+            collectedCoin = false;
+        }
+
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -87,5 +112,15 @@ public class PlayerController : MonoBehaviour
             playerIsGrounded = false;
         }
 
+    }
+
+    private void PlayJumpSound()
+    {
+        jumpSound.Play();
+    }
+
+    private void setCoinText()
+    {
+        coinText.text = "x " + coinCount.ToString();
     }
 }
