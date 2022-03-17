@@ -16,6 +16,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI coinText;
 
+    [SerializeField]
+    private Camera mainCamera;
+
     private int coinCount;
     private bool collectedCoin = false;
 
@@ -52,10 +55,16 @@ public class PlayerController : MonoBehaviour
     {
         RunningAnimation();
 
+        //Left and Right movement
         Vector3 movement = new Vector3(movementX, 0.0f, movementY);
-
         rb.AddForce(movement * speed);
 
+        JumpAnimation();
+
+    }
+
+    private void JumpAnimation()
+    {
         jumpTimer -= Time.deltaTime;
         if (jumpTimer <= 0.0f)
         {
@@ -68,7 +77,6 @@ public class PlayerController : MonoBehaviour
                 animator.SetBool("IsJumping", true);
             }
         }
-
     }
 
     private void RunningAnimation()
